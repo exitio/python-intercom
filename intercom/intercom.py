@@ -158,6 +158,12 @@ class Intercom(object):
             last_seen_ip=last_seen_ip, last_seen_user_agent=last_seen_user_agent, companies=companies)
 
     @classmethod
+    def update_user_company(cls, user_id=None, company_id=None, company_data=None):
+        data = {'id': company_id}
+        data.update(company_data or {})
+        Intercom._create_or_update_user('PUT', **{'user_id': user_id, 'companies': [data]})
+
+    @classmethod
     def create_impression(cls, user_id=None, email=None, user_ip=None,
         user_agent=None, location=None):
         """ Create an impression. 
