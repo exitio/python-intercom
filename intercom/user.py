@@ -45,7 +45,7 @@ class User(UserId): # pylint: disable=R0904
     """ Object representing http://docs.intercom.io/#UserData).  """
 
     attributes = ('user_id', 'email', 'name', 'created_at', 'custom_data',
-            'last_seen_ip', 'last_seen_user_agent')
+            'last_seen_ip', 'last_seen_user_agent', 'companies')
 
     @classmethod
     def find(cls, user_id=None, email=None):
@@ -150,6 +150,16 @@ class User(UserId): # pylint: disable=R0904
     def name(self, name):
         """ Sets the name. """
         self['name'] = name
+
+    @property
+    def companies(self):
+        """ Returns the companies. """
+        return dict.get(self, 'companies', None)
+
+    @companies.setter
+    def companies(self, companies):
+        """ Sets the companies. """
+        self['companies'] = companies
 
     @property
     def last_seen_ip(self):

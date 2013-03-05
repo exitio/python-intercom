@@ -121,7 +121,7 @@ class Intercom(object):
 
     @classmethod
     def create_user(cls, user_id=None, email=None, name=None, created_at=None, 
-            custom_data=None, last_seen_ip=None, last_seen_user_agent=None):
+            custom_data=None, last_seen_ip=None, last_seen_user_agent=None, companies=None):
         """ Create a user from the available parameters. 
 
         >>> from datetime import datetime
@@ -138,11 +138,11 @@ class Intercom(object):
         """
         return Intercom._create_or_update_user('POST', user_id=user_id, email=email, 
             name=name, created_at=created_at, custom_data=custom_data, 
-            last_seen_ip=last_seen_ip, last_seen_user_agent=last_seen_user_agent)
+            last_seen_ip=last_seen_ip, last_seen_user_agent=last_seen_user_agent, companies=companies)
 
     @classmethod
     def update_user(cls, user_id=None, email=None, name=None, created_at=None, 
-            custom_data=None, last_seen_ip=None, last_seen_user_agent=None):
+            custom_data=None, last_seen_ip=None, last_seen_user_agent=None, companies=None):
         """ Update a user with the available parameters. 
 
         >>> user = Intercom.get_user(user_id='123')
@@ -155,7 +155,7 @@ class Intercom(object):
         """
         return Intercom._create_or_update_user('PUT', user_id=user_id, email=email,
             name=name, created_at=created_at, custom_data=custom_data, 
-            last_seen_ip=last_seen_ip, last_seen_user_agent=last_seen_user_agent)
+            last_seen_ip=last_seen_ip, last_seen_user_agent=last_seen_user_agent, companies=companies)
 
     @classmethod
     def create_impression(cls, user_id=None, email=None, user_ip=None,
