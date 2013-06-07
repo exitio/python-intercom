@@ -3,7 +3,7 @@
 #
 # License: http://jkeyes.mit-license.org/
 #
-""" intercom module 
+""" intercom module
 
 All of the API requests are created, and the API responses are parsed here.
 
@@ -80,20 +80,20 @@ class Intercom(object):
         req_params['headers'] = headers
 
         resp = requests.request(method, url, timeout=Intercom.timeout, \
-                auth=(Intercom.app_id, Intercom.api_key), 
+                auth=(Intercom.app_id, Intercom.api_key),
                 **req_params)
         return resp
 
     @classmethod
     def _create_or_update_user(cls, method, **kwargs):
         """ Used by create_user and update_user. """
-        user_dict = Intercom._call(method, Intercom.api_endpoint + 'users', 
+        user_dict = Intercom._call(method, Intercom.api_endpoint + 'users',
                 params=kwargs)
         return user_dict
 
     @classmethod
     def get_users(cls):
-        """ Return a dict for the user represented by the specified email or user_id. 
+        """ Return a dict for the user represented by the specified email or user_id.
 
         >>> result = Intercom.get_users()
         >>> type(result)
@@ -107,7 +107,7 @@ class Intercom(object):
 
     @classmethod
     def get_user(cls, email=None, user_id=None):
-        """ Return a dict for the user represented by the specified email or user_id. 
+        """ Return a dict for the user represented by the specified email or user_id.
 
         >>> user = Intercom.get_user(user_id='123')
         >>> user['name']
@@ -120,9 +120,10 @@ class Intercom(object):
         return user_dict
 
     @classmethod
-    def create_user(cls, user_id=None, email=None, name=None, created_at=None, 
-            custom_data=None, last_seen_ip=None, last_seen_user_agent=None, companies=None):
-        """ Create a user from the available parameters. 
+    def create_user(cls, user_id=None, email=None, name=None, created_at=None,
+            custom_data=None, last_seen_ip=None, last_seen_user_agent=None,
+            companies=None, last_request_at=None, last_impression_at=None):
+        """ Create a user from the available parameters.
 
         >>> from datetime import datetime
         >>> import time
@@ -136,14 +137,17 @@ class Intercom(object):
         u'smuggler'
 
         """
-        return Intercom._create_or_update_user('POST', user_id=user_id, email=email, 
-            name=name, created_at=created_at, custom_data=custom_data, 
-            last_seen_ip=last_seen_ip, last_seen_user_agent=last_seen_user_agent, companies=companies)
+        return Intercom._create_or_update_user('POST', user_id=user_id, email=email,
+            name=name, created_at=created_at, custom_data=custom_data,
+            last_seen_ip=last_seen_ip, last_seen_user_agent=last_seen_user_agent,
+            companies=companies, last_request_at=last_request_at,
+            last_impression_at=last_impression_at)
 
     @classmethod
-    def update_user(cls, user_id=None, email=None, name=None, created_at=None, 
-            custom_data=None, last_seen_ip=None, last_seen_user_agent=None, companies=None):
-        """ Update a user with the available parameters. 
+    def update_user(cls, user_id=None, email=None, name=None, created_at=None,
+            custom_data=None, last_seen_ip=None, last_seen_user_agent=None,
+            companies=None):
+        """ Update a user with the available parameters.
 
         >>> user = Intercom.get_user(user_id='123')
         >>> user['name']
@@ -154,7 +158,7 @@ class Intercom(object):
 
         """
         return Intercom._create_or_update_user('PUT', user_id=user_id, email=email,
-            name=name, created_at=created_at, custom_data=custom_data, 
+            name=name, created_at=created_at, custom_data=custom_data,
             last_seen_ip=last_seen_ip, last_seen_user_agent=last_seen_user_agent, companies=companies)
 
     @classmethod
@@ -166,7 +170,7 @@ class Intercom(object):
     @classmethod
     def create_impression(cls, user_id=None, email=None, user_ip=None,
         user_agent=None, location=None):
-        """ Create an impression. 
+        """ Create an impression.
 
         >>> result = Intercom.create_impression(email="somebody@example.com",
         ... user_agent="MyApp/1.0", user_ip="2.3.4.5")
@@ -174,17 +178,17 @@ class Intercom(object):
         1
 
         """
-        params = { 'email': email, 'user_id': user_id, 'user_ip': user_ip, 
+        params = { 'email': email, 'user_id': user_id, 'user_ip': user_ip,
                 'user_agent': user_agent, 'location': location }
-        user_dict = Intercom._call('POST', Intercom.api_endpoint + 'users/impressions', 
+        user_dict = Intercom._call('POST', Intercom.api_endpoint + 'users/impressions',
                 params=params)
         return user_dict
 
     @classmethod
     def get_message_threads(cls, user_id=None, email=None, thread_id=None):
-        """ If a thread_id is specified, this returns a specific MessageThread 
+        """ If a thread_id is specified, this returns a specific MessageThread
         (if it can find one), otherwise it returns all MessageThreads for the
-        particular user. 
+        particular user.
 
         >>> message_threads = Intercom.get_message_threads(email="somebody@example.com")
         >>> type(message_threads)
@@ -196,15 +200,15 @@ class Intercom(object):
 
         """
         params = { 'email': email, 'user_id': user_id, 'thread_id': thread_id }
-        msg_dict = Intercom._call('GET', Intercom.api_endpoint + 'users/message_threads', 
-                params=params)        
+        msg_dict = Intercom._call('GET', Intercom.api_endpoint + 'users/message_threads',
+                params=params)
         return msg_dict
 
     @classmethod
     def create_message_thread(cls, user_id=None, email=None, body=None):
-        """ Create a MessageThread. 
+        """ Create a MessageThread.
 
-        >>> message_thread = Intercom.create_message_thread(email="somebody@example.com", 
+        >>> message_thread = Intercom.create_message_thread(email="somebody@example.com",
         ... body="Uh, everything's under control. Situation normal.")
         >>> message_thread['thread_id']
         5591
@@ -215,16 +219,16 @@ class Intercom(object):
 
         """
         params = { 'email': email, 'user_id': user_id, 'body': body }
-        user_dict = Intercom._call('POST', Intercom.api_endpoint + 'users/message_threads', 
-                params=params)        
+        user_dict = Intercom._call('POST', Intercom.api_endpoint + 'users/message_threads',
+                params=params)
         return user_dict
 
     @classmethod
-    def reply_message_thread(cls, user_id=None, email=None, thread_id=None, 
+    def reply_message_thread(cls, user_id=None, email=None, thread_id=None,
             body=None, read=None):
         """ Reply to the specific thread.
 
-        >>> message_thread = Intercom.reply_message_thread(email="somebody@example.com", 
+        >>> message_thread = Intercom.reply_message_thread(email="somebody@example.com",
         ... thread_id=5591, body="If you're not talking to me you must be talking to someone")
         >>> len(message_thread)
         6
@@ -234,8 +238,8 @@ class Intercom(object):
         2
 
         """
-        params = { 'email': email, 'user_id': user_id, 'thread_id': thread_id, 
+        params = { 'email': email, 'user_id': user_id, 'thread_id': thread_id,
             'body': body, 'read': read }
-        user_dict = Intercom._call('PUT', Intercom.api_endpoint + 'users/message_threads', 
+        user_dict = Intercom._call('PUT', Intercom.api_endpoint + 'users/message_threads',
                 params=params)
         return user_dict
